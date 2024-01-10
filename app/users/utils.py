@@ -1,4 +1,4 @@
-from fastapi import HTTPException, Request
+from fastapi import HTTPException, Request, status
 from core.config import CLERK_WEBHOOK_SECRET
 from svix import Webhook
 import logging
@@ -24,7 +24,10 @@ async def verify_webhook_signature(request: Request) -> WebhookSchema:
 
         # If there are missing Svix headers, error out
         if not svix_id or not svix_timestamp or not svix_signature:
-            return HTTPException("Error occurred -- no svix headers", status_code=400)
+            return HTTPException(
+                detail="Error occurred -- no svix headers",
+                status_code=status.HTTP_400_BAD_REQUEST,
+            )
 
         # Attempt to verify the incoming webhook
         # If successful, the payload will be available from 'evt'
@@ -41,7 +44,7 @@ async def verify_webhook_signature(request: Request) -> WebhookSchema:
     except Exception as err:
         # Log the error and return an error response
         logger.error(f"Webhook failed to verify. Error: {str(err)}")
-        raise HTTPException(status_code=400, detail=str(err))
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(err))
 
     # Grab the ID and TYPE of the Webhook
     wh_id = evt["data"]["id"]
@@ -50,4 +53,4 @@ async def verify_webhook_signature(request: Request) -> WebhookSchema:
     logger.info(f"Webhook with an ID of {wh_id} and type of {event_type}")
     # Console log the full payload to view
 
-    return evt
+    return WebhookSchema(**evt)

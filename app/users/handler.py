@@ -31,5 +31,4 @@ async def clerk_webhook(request: Request, session: Session = Depends(get_db)):
 async def get_users(session: Session = Depends(get_db)) -> List[UserResponseSchema]:
     users = session.query(Users).all()
 
-    print(users)
     return users

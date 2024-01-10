@@ -27,16 +27,14 @@ class UsersQuery:
     def _get_clerk_email(payload: WebhookSchema) -> EmailStr:
         primary_email_id = payload.data.primary_email_address_id
         email = next(
-            filter(
-                lambda x: x.get("id") == primary_email_id, payload.data.email_addresses
-            ),
+            filter(lambda x: x.id == primary_email_id, payload.data.email_addresses),
             None,
         )
         if email == None:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST, detail="No email provided"
             )
-        return email["email_address"]
+        return email.email_address
 
     def create_user(self):
         data = self.payload.data

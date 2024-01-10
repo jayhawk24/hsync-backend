@@ -14,23 +14,21 @@ class UserResponseSchema(BaseModel):
 
 
 class EmailAddress(BaseModel):
-    email_address: Optional[str]
-    id: Optional[str]
-    linked_to: Optional[List[str]]
+    email_address: str = None
+    id: str = None
 
 
-class UserData(UserResponseSchema):
-    id: Optional[str]
-    email: Optional[str]
-    first_name: Optional[str]
-    last_name: Optional[str]
-    image_url: Optional[str]
+class UserData(BaseModel):
+    id: str = None
+    first_name: str = None
+    last_name: str = None
+    image_url: str = None
 
-    email_addresses: Optional[List[EmailAddress]]
-    phone_numbers: Optional[List[str]]
-    primary_email_address_id: Optional[str]
+    email_addresses: List[EmailAddress] = None
+    phone_numbers: List[str] = None
+    primary_email_address_id: str = None
 
 
 class WebhookSchema(BaseModel):
-    data: Optional[UserData]
-    type: Optional[str]
+    data: UserData = None
+    type: str = None
