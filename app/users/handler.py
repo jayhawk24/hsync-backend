@@ -15,7 +15,7 @@ async def clerk_webhook(request: Request, session: Session = Depends(get_db)):
     webhook_payload = await verify_webhook_signature(request)
 
     users_query = UsersQuery(payload=webhook_payload, session=session)
-    users_query.crud_user()
+    data = users_query.crud_user()
 
     try:
         session.commit()
@@ -24,7 +24,7 @@ async def clerk_webhook(request: Request, session: Session = Depends(get_db)):
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e)
         )
 
-    return {"message": "Webhook received"}
+    return {"message": "Webhook received", "data": data}
 
 
 @user_router.get("/")

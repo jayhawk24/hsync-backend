@@ -48,7 +48,7 @@ class UsersQuery:
         )
         self.session.add(user)
 
-        return user
+        return "User created."
 
     def update_user(self):
         payload_data = self.payload.data
@@ -59,9 +59,12 @@ class UsersQuery:
         user.image_url = payload_data.image_url
 
         self.session.flush()
+        return "User updated."
 
     def delete_user(self):
         self.session.query(Users).filter_by(id=self.payload_data.id).delete()
+
+        return "User deleted."
 
     def crud_user(self):
         is_valid = self.validate_payload()
@@ -74,3 +77,5 @@ class UsersQuery:
             return self.update_user()
         if self.payload.type == "user.deleted":
             return self.delete_user()
+
+        return "No action needed."
