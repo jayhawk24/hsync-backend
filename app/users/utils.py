@@ -2,11 +2,12 @@ from fastapi import HTTPException, Request
 from core.config import CLERK_WEBHOOK_SECRET
 from svix import Webhook
 import logging
+from users.schemas import WebhookSchema
 
 logger = logging.getLogger("router")
 
 
-async def verify_webhook_signature(request: Request):
+async def verify_webhook_signature(request: Request) -> WebhookSchema:
     webhook = Webhook(CLERK_WEBHOOK_SECRET)
 
     try:
@@ -49,4 +50,4 @@ async def verify_webhook_signature(request: Request):
     logger.info(f"Webhook with an ID of {wh_id} and type of {event_type}")
     # Console log the full payload to view
 
-    return evt["data"]
+    return evt

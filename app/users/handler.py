@@ -14,8 +14,6 @@ user_router = APIRouter(prefix="/users", tags=["Users"])
 async def clerk_webhook(request: Request, session: Session = Depends(get_db)):
     webhook_payload = await verify_webhook_signature(request)
 
-    print(webhook_payload)
-
     users_query = UsersQuery(payload=webhook_payload, session=session)
     users_query.crud_user()
 
