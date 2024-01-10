@@ -1,0 +1,4 @@
+from decouple import config
+
+SQLALCHEMY_DATABASE_URL = config("DATABASE_URL")
+CLERK_WEBHOOK_SECRET = config("CLERK_WEBHOOK_SECRET")

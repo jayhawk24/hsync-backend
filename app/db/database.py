@@ -2,9 +2,7 @@ from sqlalchemy import create_engine, text
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.exc import OperationalError
-from decouple import config
-
-SQLALCHEMY_DATABASE_URL = config("DATABASE_URL")
+from core.config import SQLALCHEMY_DATABASE_URL
 
 engine = create_engine(
     SQLALCHEMY_DATABASE_URL,
@@ -23,3 +21,11 @@ def check_db_connection():
             return True
     except OperationalError as e:
         return False
+
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
